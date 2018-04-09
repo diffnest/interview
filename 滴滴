@@ -1,0 +1,77 @@
+1.	实现一个方法，输入一个整型变量，按位求和，使用递归实现，如$a=1234 ，返回10
+
+function func($num) {
+        if ($num == 0) {
+                return 0;
+        }
+        $a = $num %  10;
+        $b = func(($num - $a)/10);
+        return $a +$b;
+}
+
+2.	100m内存 排序10G文件
+
+提示：外部排序 多路归并排序
+将文件切割成多个小文件，每个文件先进行排序，然后进行合并排序
+
+3.	实现一个方法，将两个有序数组合并成一个有序数组
+
+function mergeSort($arrayA, $arrayB) {
+        $lengthA = count($arrayA);
+        $lengthB = count($arrayB);
+        $i = $j = $k = 0;
+        $newArray = array();
+
+        while($i < $lengthA && $j < $lengthB) {
+                if ($arrayA[$i] < $arrayB[$j]) {
+                        $newArray[$k] = $arrayA[$i];
+                        $i++; $k++;
+                } else {
+                        $newArray[$k] = $arrayB[$j];
+                        $j++; $k++;
+                }
+        }
+
+        while ($i < $lengthA) {
+                $newArray[$k] = $arrayA[$i];
+                $i++; $k++;
+        }
+        while ($j < $lengthB) {
+                $newArray[$k] = $arrayB[$j];
+                $j++; $k++;
+        }
+        return $newArray;
+}
+
+4.	简述工厂模式
+5.	Nginx和PHP协同工作原理简述
+
+nginx master worker
+php-fpm master worker
+
+6.	Nginx配置禁止ip访问
+7.	Redis有哪些数据类型，其中有序是通过什么进行排序的
+
+a. string hash list set zset
+b. 通过score进行排序
+
+8.	实现一段代码，传入两个linux路径字符串参数，要求输出相对路径，如 $a='/home/a'，$b='/home/b/a'，返回'../../a'
+9.	MySQL事务隔离有几种，分别是什么
+10.	未提交读中出现脏读问题，请问MySQL通过什么解决的脏读
+11.	共享锁是什么意思
+12.	有一张表中两条数据PK分别为1和10，请问update table where id = 9(表中不存在9数据)请问是否会加行锁
+13.	两个进程通过什么进行通信
+14.	soket和端口的区别
+15.	TCP三次握手时端口都有几种状态
+16.	查看端口使用状态使用什么命令
+
+netstat, 引出第15题答案
+
+17.	MySQL主从同步原理
+
+主库进行更新操作更新binlog日志，从库将binlog日志读取到中继日志relaylog，执行日志中的更新操作，从而实现同步
+
+18.	MySQL索引常见有哪些，数据结构是什么样的
+19.	为什么索引数据结构不使用hash
+
+
