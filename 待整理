@@ -1,0 +1,330 @@
+    将两个有序数组合并成一个有序的数组
+    统计访问日志中最近1小时访问量top10的ip
+
+awk命令
+
+    自定义实现explode函数的功能
+    cookie和session的区别
+    如何解决session跨域的问题
+    MySQL索引优化的思路
+    API接口响应时间一般都是在多长时间内
+    接口响应时间较长应该如何排查
+    设计一个订单号生成器，要求具有唯一性，类型为整型，并且含有其它可读信息，不能有序生成
+    业务员后台需要导出几百条数据，请问怎么设计
+    网站访问速度慢，请问如何进行优化
+    php写时复制机制（copy on write）
+
+
+    array(1, 2 ,3, 1, 2)查找出现过一次的值
+
+array array_count_values ( array $array )
+array_count_values() 返回一个数组： 数组的键是 array 里单元的值； 数组的值是 array 单元的值出现的次数。
+
+    主键索引 和 普通索引的区别，画出innodb索引结构
+    select uid,count(type) from t where status = 0 group by uid having count(type); select where group having执行顺序，count(type)执行多少次
+
+count(1)是计入null的，count（字段）不计入
+SQL常规执行顺序：
+(1) from
+(3) join
+(2) on
+(4) where
+(5) group by(开始使用select中的别名，后面的语句中都可以使用)
+(6) avg,sum....
+(7) having
+(8) select
+(9) distinct
+(10) order by
+(11) LIMIT
+
+SQL语句的语法顺序：
+
+FROM -> WHERE -> GROUP BY -> HAVING -> SELECT -> DISTINCT -> UNION -> ORDER BY
+
+因此一般不能在having condition中使用select list中的alias。
+
+但是mysql对此作了扩展。在mysql 5.7.5之前的版本，ONLY_FULL_GROUP_BY sql mode默认不开启。在5.7.5或之后的版本默认开启。
+
+如果ONLY_FULL_GROUP_BY sql mode不开启，那么mysql对标准SQL的扩展可以生效：
+
+- 允许在select list、having condition和order by list中使用没有出现在group by list中的字段。此时mysql会随机选择没有出现在group by list中的字段的值。效果和使用ANY_VALUE()是相同的。
+- 允许在having condition中使用select list中的alias
+
+    100g文件 每一行是一个单词，输入hello，返回是否在这个文件中Y or N
+    输出access.log后10行, 匹配第2列为502，输入第一列内容
+
+tail -n 10 access.log | awk '{if($2~/^502$/)print $1}'
+
+    GET和POST提交方式的区别
+
+- GET产生一个TCP数据包；POST产生两个TCP数据包；
+    - 对于GET方式的请求，浏览器会把http header和data一并发送出去，服务器响应200（返回数据）
+    - 对于POST，浏览器先发送header，服务器响应100 continue，浏览器再发送data，服务器响应200 ok（返回数据）。
+- GET在浏览器回退时是无害的，而POST会再次提交请求
+- GET请求会被浏览器主动cache，而POST不会，除非手动设置
+- GET请求参数会被完整保留在浏览器历史记录里，而POST中的参数不会被保留
+- GET请求只能进行url编码，而POST支持多种编码方式
+- GET比POST更不安全，因为参数直接暴露在URL上，所以不能用来传递敏感信息
+
+
+    memache是如何做到hash一致的
+
+crc32，每台服务器分出虚拟节点，实现负载均衡，减少新增服务器时，导致大量数据未命中的情况
+
+    __autoload()原理
+
+http://php.net/manual/zh/language.oop5.autoload.php
+
+    ORM有了解过吗
+    必包函数 匿名类
+    查看挂载磁盘情况，查看文件夹大小
+    B+tree结构
+
+多路搜索树
+
+    XSS是什么，怎么防止发生XSS
+
+跨域脚本攻击，最简单的方法是校验用户输入信息
+
+    redis区别 zset 和 set有什么区别
+
+set: 集合，无序
+zset: 有序集合，可以设定score来指定集合内部顺序
+
+    php7新特性. （见作业盒子面试笔记）
+    mysql主从同步是怎么触发的
+
+binlog dump线程
+当slave连接到master的时候，master机器会为slave开启binlog dump线程。当master 的 binlog发生变化的时候，binlog dump线程会通知slave，并将相应的binlog内容发送给slave。
+
+    是否搭建过服务器
+    php垃圾回收机制
+
+每个php变量存在一个叫"zval"的变量容器中。一个zval变量容器，除了包含变量的类型和值，还包括两个字节的额外信息。第一个是"is_ref"，是个bool值，用来标识这个变量是否是属于引用集合(reference set)。通过这个字节，php引擎才能把普通变量和引用变量区分开来，由于php允许用户通过使用&来使用自定义引用，zval变量容器中还有一个内部引用计数机制，来优化内存使用。第二个额外字节是"refcount"，用以表示指向这个zval变量容器的变量(也称符号即symbol)个数。所有的符号存在一个符号表中，其中每个符号都有作用域(scope)，那些主脚本(比如：通过浏览器请求的的脚本)和每个函数或者方法也都有作用域。
+
+    行级锁
+
+InnoDB行锁是通过给索引上的索引项加锁来实现的，这一点MySQL与Oracle不同，后者是通过在数据块中对相应数据行加锁来实现的。InnoDB这种行锁实现特点意味着：只有通过索引条件检索数据，InnoDB才使用行级锁，否则，InnoDB将使用表锁！
+
+    私有ip段
+
+10.0.0.0~10.255.255.255（A类）
+172.16.0.0~172.31.255.255（B类）
+192.168.0.0~192.168.255.255（C类）
+
+
+    php连接MySQL有几种方式
+
+mysql mysqli PDO
+
+    PDO mysql mysqli有什么区别
+    PHP怎样实现mysql长连接
+
+http://php.net/mysql_pconnect
+http://php.net/manual/zh/mysqli.persistconns.php
+
+    写一段代码要求实现读取数据库列名
+
+考察：mysql方法 mysqli方法
+
+    array_map使用
+    一个不知道长度的字符串，如果字符串大于前7位则字符截断，不足7个字符使用*号补充返回前7位字符
+
+考察：字符串函数
+
+    替换手机号中间4位数为*号
+
+preg_replace('/([0-9]{3})([0-9]{4})([0-9]{4})/', '$1******$3', $mobile);
+
+    http状态码
+    如果php memcache扩展未安装
+
+
+可以使用socket实现连接
+
+
+    502状态码是什么意思，以及产生的原因
+
+fpm master 进程根据配置指派特定的 worker 进程进行请求处理，如果没有可用进程，返回错误，这也是我们配合 Nginx 遇到502错误比较多的原因
+worker 进程处理请求，如果超时，返回504错误
+
+    Linux查看服务器状态
+
+
+top
+
+    varchar(1) 和 varchar(10)区别
+
+
+存储字符个数不同，varchar额外需要1~2(>255)个字记录长度信息
+
+    了解浏览器缓存机制，304状态码原因由哪个HTTP头控制
+    数据库类型占多少字节
+
+类型	大小	范围（有符号）	范围（无符号）	用途
+TINYINT	1 字节	(-128，127)	(0，255)	小整数值
+SMALLINT	2 字节	(-32 768，32 767)	(0，65 535)	大整数值
+MEDIUMINT	3 字节	(-8 388 608，8 388 607)	(0，16 777 215)	大整数值
+INT或INTEGER	4 字节	(-2 147 483 648，2 147 483 647)	(0，4 294 967 295)	大整数值
+BIGINT	8 字节	(-9 233 372 036 854 775 808，9 223 372 036 854 775 807)	(0，18 446 744 073 709 551 615)	极大整数值
+FLOAT	4 字节	(-3.402 823 466 E+38，-1.175 494 351 E-38)，0，(1.175 494 351 E-38，3.402 823 466 351 E+38)	0，(1.175 494 351 E-38，3.402 823 466 E+38)	单精度
+浮点数值
+DOUBLE	8 字节	(-1.797 693 134 862 315 7 E+308，-2.225 073 858 507 201 4 E-308)，0，(2.225 073 858 507 201 4 E-308，1.797 693 134 862 315 7 E+308)	0，(2.225 073 858 507 201 4 E-308，1.797 693 134 862 315 7 E+308)	双精度
+浮点数值
+DECIMAL	对DECIMAL(M,D) ，如果M>D，为M+2否则为D+2	依赖于M和D的值	依赖于M和D的值	
+小数值
+
+    InnoDB和MyISAM的区别
+
+
+    电商秒杀，从前端到后端包括服务器如何设计，用到消息队列的情况下，消息处理是异步的，如何在前端展示秒杀结果
+    apache日志有几种类型
+    php日志有几种类型
+    PHP前端控制器基本都是将请求链接解析成两个变量，一个是控制器名，一个是action名，解析出来是如何加载控制器的，用什么方法
+
+
+include_once/require_once，习惯将include_once用于流程控制
+
+     慢查询用到explain，看explain哪几个字段，另外举出一个type不是all但是查询慢的
+
+explain详解
+
+    js设置cookies和php设置cookies有什么区别
+
+
+    redis支持5中数据类型
+
+string（字符串），hash（哈希），list（列表），set（集合）及zset(sorted set：有序集合)
+
+    PHP7新特性
+
+- 新增函数返回类型说明
+- 新增null合并运算符  ??
+- 太空船操作符（组合比较符）
+- 命名空间与use关键字批量声明
+- 通过 define() 定义常量数组
+- Unicode codepoint 转译语法
+- 匿名类
+- 为unserialize()提供过滤
+- 整数除法函数 intdiv()
+- session_start() 可以接受一个 array 作为参数， 用来覆盖 php.ini 文件中设置的 会话配置选项
+- 删除mysql
+
+    array_merge([1,2,3], [1,2,3], [4,5,6]);的结果
+
+Array ( [0] => 1 [1] => 2 [2] => 3 [3] => 1 [4] => 2 [5] => 3 [6] => 4 [7] => 5 [8] => 6 )
+
+    int(1)和int(11)的区别
+
+都是4个字节的长度，只是展示长度不一样
+
+    php魔术方法
+
+    __construct()，类的构造函数
+    __destruct()，类的析构函数
+    __call()，在对象中调用一个不可访问方法时调用
+    __callStatic()，用静态方式中调用一个不可访问方法时调用
+    __get()，获得一个类的成员变量时调用
+    __set()，设置一个类的成员变量时调用
+    __isset()，当对不可访问属性调用isset()或empty()时调用
+    __unset()，当对不可访问属性调用unset()时被调用。
+    __sleep()，执行serialize()时，先会调用这个函数
+    __wakeup()，执行unserialize()时，先会调用这个函数
+    __toString()，类被当成字符串时的回应方法
+    __invoke()，调用函数的方式调用一个对象时的回应方法
+    __set_state()，调用var_export()导出类时，此静态方法会被调用。
+    __clone()，当对象复制完成时调用
+    __autoload()，尝试加载未定义的类
+    __debugInfo()，打印所需调试信息
+
+    快速排序
+
+<?php
+function quickSort(&$arr){
+    if(count($arr)>1){
+        $k=$arr[0];
+        $x=array();
+        $y=array();
+        $_size=count($arr);
+        for($i=1;$i<$_size;$i++){
+            if($arr[$i]<=$k){
+                $x[]=$arr[$i];
+            }elseif($arr[$i]>$k){
+                $y[]=$arr[$i];
+            }
+        }
+        $x=quickSort($x);
+        $y=quickSort($y);
+        return array_merge($x,array($k),$y);
+    }else{
+        return$arr;
+    }
+}
+
+    简单实现单例模式
+
+
+<?php
+class single
+{
+     private static $instance;
+     private function __construct(){};
+     public static getInstance()
+     {
+         if (!is_object(self::$instance)) {
+               self::$instance = new self();
+         }
+         return self::$instance
+     }
+}
+
+    二维数组排序
+
+array_mutilsort
+
+    MySQL 主键索引 普通索引 联合索引区别
+    array(["id"=>1, "name" => 'song'], ["id"=>2, "name" => 'li'], ["id"=>3, "name" => 'zhang']), 用id列作为key，name列作为value
+
+array_combine(array_column($array, 'id'), array_column($array, 'name'));
+
+     Mysql整型数据范围
+
+
+MySQL数据类型	含义（有符号）
+tinyint(m)	1个字节  范围(-128~127)
+smallint(m)	2个字节  范围(-32768~32767)
+mediumint(m)	3个字节  范围(-8388608~8388607)
+int(m)	4个字节  范围(-2147483648~2147483647)
+bigint(m)	
+8个字节  范围(+-9.22*10的18次方)
+
+    vim显示行号，跳到某一行, vim跳到文件末尾
+
+显示行号 -> :set nu
+跳到某一行 -> nG
+跳到文件末尾 -> shift+g = G
+
+    统计一段文本中，某一单词有多少个
+
+grep -o "tag" [file] | wc -l
+
+    表中a,b为联合索引，c为普通索引，select filed from table where a和select filed from table where c哪个更快一些
+
+(?)第一个联合索引占的内存大
+https://www.cnblogs.com/tgycoder/p/5410057.html
+https://www.cnblogs.com/wicub/p/5898286.html
+
+    a,b为联合索引，select * from t where a and b 和 select * from t where b and a有什么不同
+
+相同，使用联合索引使用与and顺序无关
+
+    哪些情况mysql会使用临时表
+
+1、UNION查询；
+2、用到TEMPTABLE算法或者是UNION查询中的视图；
+3、ORDER BY和GROUP BY的子句不一样时；
+4、表连接中，ORDER BY的列不是驱动表中的；
+5、DISTINCT查询并且加上ORDER BY时；
+6、SQL中用到SQL_SMALL_RESULT选项时；
+7、FROM中的子查询；
+8、子查询或者semi-join时创建的表；
