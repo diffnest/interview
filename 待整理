@@ -328,3 +328,15 @@ https://www.cnblogs.com/wicub/p/5898286.html
 6、SQL中用到SQL_SMALL_RESULT选项时；
 7、FROM中的子查询；
 8、子查询或者semi-join时创建的表；
+
+
+写出PHP常用的字符串函数
+PHP魔术方法都有哪些
+MySQL怎么保持和cache缓存
+使用两个栈实现队列
+设计秒杀系统
+
+脏读mysql通过什么避免=》》版本控制避免幻读
+
+mysql事务隔离级别
+mysql索引查找复杂度logN
