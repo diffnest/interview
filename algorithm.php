@@ -210,4 +210,89 @@ class algorithm {
 
         return false;
     }
+    
+    /**
+     * 归并排序
+     *1）“分解”——将序列每次折半划分。
+     *2）“合并”——将划分后的序列段两两合并后排序。
+     */
+    // 递归
+    function mergeSort(&$arr, $left, $right) {
+        if ($left < $right) {
+            // 找出中间索引
+            $mid = floor(($left + $right) / 2);
+            // 对左边数组进行递归
+            mergeSort($arr, $left, $mid);
+            // 对右边数组进行递归
+            mergeSort($arr, $mid + 1, $right);
+            // 合并
+            merge($arr, $left, $mid, $right);
+        }
+    }
+
+    // 将两个有序数组合并成一个有序数组
+    function merge(&$arr, $left, $mid, $right) {
+        $i = $left;     // 左数组的下标
+        $j = $mid + 1;  // 右数组的下标
+        $temp = array();// 临时合并数组
+        // 扫描第一段和第二段序列，直到有一个扫描结束
+        while ($i <= $mid && $j <= $right) {
+            // 判断第一段和第二段取出的数哪个更小，将其存入合并序列，并继续向下扫描
+            if ($arr[$i] < $arr[$j]) {
+                $temp[] = $arr[$i];
+                $i++;
+            } else {
+                $temp[] = $arr[$j];
+                $j++;
+            }
+        }
+        // 比完之后，假如左数组仍有剩余，则直接全部复制到 temp 数组
+        while ($i <= $mid) {
+            $temp[] = $arr[$i];
+            $i++;
+        }
+        // 比完之后，假如右数组仍有剩余，则直接全部复制到 temp 数组
+        while ($j <= $right) {
+            $temp[] = $arr[$j];
+            $j++;
+        }
+        // 将合并序列复制到原始序列中
+        for($k = 0; $k < count($temp); $k++) {
+            $arr[$left + $k] = $temp[$k];
+        }
+    }
+
+    // 测试
+    $arr = [85, 24, 63, 45, 17, 31, 96];
+    mergeSort($arr, 0, count($arr) - 1);
+    print_r($arr);
+    
+    // 归并排序主程序
+    function mergeSort($arr) {
+        $len = count($arr);
+        if ($len <= 1) {
+            return $arr;
+        } // 递归结束条件, 到达这步的时候, 数组就只剩下一个元素了, 也就是分离了数组
+
+        $mid = intval($len / 2); // 取数组中间
+        $left = array_slice($arr, 0, $mid); // 拆分数组0-mid这部分给左边left
+        $right = array_slice($arr, $mid); // 拆分数组mid-末尾这部分给右边right
+        $left = mergeSort($left); // 左边拆分完后开始递归合并往上走
+        $right = mergeSort($right); // 右边拆分完毕开始递归往上走
+        $arr = merge($left, $right); // 合并两个数组,继续递归
+
+        return $arr;
+    }
+
+    // merge函数将指定的两个有序数组(arrA, arr)合并并且排序
+    function merge($arrA, $arrB) {
+        $arrC = array();
+        while (count($arrA) && count($arrB)) {
+            // 这里不断的判断哪个值小, 就将小的值给到arrC, 但是到最后肯定要剩下几个值,
+            // 不是剩下arrA里面的就是剩下arrB里面的而且这几个有序的值, 肯定比arrC里面所有的值都大所以使用
+            $arrC[] = $arrA[0] < $arrB[0] ? array_shift($arrA) : array_shift($arrB);
+        }
+
+        return array_merge($arrC, $arrA, $arrB);
+    }
 }
